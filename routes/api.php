@@ -26,7 +26,7 @@ Route::post('/groups', 'GroupController@store');
 //fetch info of a group
 Route::get('/groups/{id}', 'GroupController@show');
 //modify group info
-Route::put('/groups/{id}', 'GroupController@update');
+Route::post('/groups/{id}', 'GroupController@update');
 
 //---------------- users  ---------------------//
 //fetch list of users
@@ -36,4 +36,4 @@ Route::post('/users', 'UserController@store');
 //fetch info of a user
 Route::get('/users/{id}', 'UserController@show');
 //modify user info
-Route::put('/users/{id}', 'UserController@update');
+Route::post('/users/{id}', 'UserController@update');

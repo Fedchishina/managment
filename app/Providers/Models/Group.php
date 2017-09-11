@@ -11,4 +11,5 @@ class Group extends Model
     public static $rules = [
         'name' => 'required'
     ];
+
 }

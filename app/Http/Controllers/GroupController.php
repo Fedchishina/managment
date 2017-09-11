@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use App\Models\Group;
 use Mockery\Exception;
+use Validator;
 
 class GroupController extends Controller
 {
@@ -12,7 +14,7 @@ class GroupController extends Controller
     {
         try {
             $groups = Group::all();
-            return parent::returnResponseData(0, $groups, 200, 'fetch list of groups');
+            return parent::returnResponseData(0, ['groups' => $groups], 200, 'fetch list of groups');
         }
         catch (\Exception $e) {
             return parent::returnResponseData( 1,'', 500, 'server error: ' . $e->getMessage());
@@ -22,12 +24,8 @@ class GroupController extends Controller
     public function show($id)
     {
         try {
-            $group = Group::find($id);
-            if ($group) {
-                return parent::returnResponseData(0, $group, 200, 'fetch info of a group');
-            } else {
-                return parent::returnResponseData(1, '', 204, 'group not found');
-            }
+            $group = Group::findOrFail($id);
+            return parent::returnResponseData(0, ['group' => $group], 200, 'fetch info of a group');
         } catch (\Exception $e) {
             return parent::returnResponseData(1, '', 500, 'server error: ' . $e->getMessage());
         }
@@ -36,26 +34,32 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         try {
-            $input = $request->all();
-            $group = Group::create();
-            $validator = Validator::make($input, Group::$rules);
+            $validator = Validator::make($request->all(), Group::$rules);
             if ($validator->fails()) {
-
+                return parent::returnResponseData(1, '', 500, 'validation error', $validator->errors());
             } else {
-                return parent::returnResponseData(0, $group, 200, 'group created successfully');
+                $group = Group::create($request->all());
+                return parent::returnResponseData(0, ['group' => $group], 200, 'group created successfully');
             }
-
-        } catch (Exception $e) {
-            return parent::returnResponseData(1, '', 500, 'server error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            return parent::returnResponseData(1, '', 500, 'server error: ' . $e->getMessage(), []);
         }
 
     }
 
     public function update(Request $request, $id)
     {
-        $group = Group::findOrFail($id);
-        $group->update($request->all());
-
-        return $group;
+        try {
+            $group = Group::findOrFail($id);
+            $validator = Validator::make($request->all(), Group::$rules);
+            if ($validator->fails()) {
+                return parent::returnResponseData(1, '', 500, 'validation error', $validator->errors());
+            } else {
+                $group->update($request->all());
+                return parent::returnResponseData(0, $group, 200, 'group updated successfully');
+            }
+        } catch (\Exception $e) {
+            return parent::returnResponseData(1, '', 500, 'server error: ' . $e->getMessage(),[]);
+        }
     }
 }
