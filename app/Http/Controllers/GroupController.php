@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use App\Models\Group;
-use Mockery\Exception;
 use Validator;
 
 class GroupController extends Controller

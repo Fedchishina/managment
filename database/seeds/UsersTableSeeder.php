@@ -14,14 +14,14 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $faker = \Faker\Factory::create();
-        $password = Hash::make('secret');
+        //$password = Hash::make('secret');
 
         //make Admin user
         User::create([
             'last_name' => 'Admin',
             'first_name' => 'Admin',
             'email' => 'admin@test.com',
-            'password' => $password,
+            //'password' => $password,
             'group_id' => null,
         ]);
 
@@ -35,7 +35,7 @@ class UsersTableSeeder extends Seeder
                 'email' => $faker->email,
                 'is_active' => $faker->randomElement([0, 1]),
                 'group_id' => $faker->numberBetween($min = 1, $max = 10),
-                'password' => $password,
+                //'password' => $password,
             ]);
         }
     }

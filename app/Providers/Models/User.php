@@ -28,6 +28,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        //'password',
+        'remember_token',
+    ];
+
+    public static $rules = [
+        'last_name' => 'required|string|max:255',
+        'first_name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'is_active' => 'boolean',
+        'group_id' => 'required',
     ];
 }
