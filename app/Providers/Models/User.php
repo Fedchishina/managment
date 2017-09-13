@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -19,7 +20,8 @@ class User extends Authenticatable
         'first_name',
         'email',
         'is_active',
-        'group_id'
+        'group_id',
+        'api_token'
     ];
 
     /**
@@ -30,6 +32,7 @@ class User extends Authenticatable
     protected $hidden = [
         //'password',
         'remember_token',
+        'api_token'
     ];
 
     public static $rules = [
@@ -37,6 +40,6 @@ class User extends Authenticatable
         'first_name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
         'is_active' => 'boolean',
-        'group_id' => 'required',
+        //'group_id' => 'required',
     ];
 }

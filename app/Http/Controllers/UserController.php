@@ -35,7 +35,9 @@ class UserController extends Controller
             if ($validator->fails()) {
                 return parent::returnResponseData(1, '', 500, 'validation error', $validator->errors());
             } else {
-                $user = User::create($request->all());
+                $input = $request->all();
+                $input['api_token']=str_random(60);
+                $user = User::create($input);
                 return parent::returnResponseData(0, ['user' => $user], 200, 'user created successfully');
             }
         } catch (\Exception $e) {
