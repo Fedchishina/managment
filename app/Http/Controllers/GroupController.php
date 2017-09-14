@@ -8,6 +8,9 @@ use Validator;
 
 class GroupController extends Controller
 {
+    /*
+     * отображение групп
+     */
     public function index()
     {
         try {
@@ -19,6 +22,9 @@ class GroupController extends Controller
         }
     }
 
+    /*
+     * отображение группы по id
+     */
     public function show($id)
     {
         try {
@@ -29,13 +35,18 @@ class GroupController extends Controller
         }
     }
 
+    /*
+     * вставка группы
+     */
     public function store(Request $request)
     {
         try {
+            //проверка на валидацию
             $validator = Validator::make($request->all(), Group::$rules);
             if ($validator->fails()) {
                 return parent::returnResponseData(1, '', 500, 'validation error', $validator->errors());
             } else {
+                //вставка группы
                 $group = Group::create($request->all());
                 return parent::returnResponseData(0, ['group' => $group], 200, 'group created successfully');
             }
@@ -45,14 +56,19 @@ class GroupController extends Controller
 
     }
 
+    /*
+     * обновление группы по id
+     */
     public function update(Request $request, $id)
     {
         try {
             $group = Group::findOrFail($id);
+            //проверка на валидацию
             $validator = Validator::make($request->all(), Group::$rules);
             if ($validator->fails()) {
                 return parent::returnResponseData(1, '', 500, 'validation error', $validator->errors());
             } else {
+                //обновление группы
                 $group->update($request->all());
                 return parent::returnResponseData(0, $group, 200, 'group updated successfully');
             }

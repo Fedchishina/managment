@@ -11,6 +11,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    //ответ API на запрос
     public function returnResponseData($error, $content, $code, $message, $errors=[])
     {
         $data = [

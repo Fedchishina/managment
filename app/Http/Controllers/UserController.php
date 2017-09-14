@@ -7,6 +7,9 @@ use Validator;
 
 class UserController extends Controller
 {
+    /*
+     * отображение пользователей
+     */
     public function index()
     {
         try {
@@ -18,6 +21,9 @@ class UserController extends Controller
         }
     }
 
+    /*
+     * отображение пользователя по id
+     */
     public function show($id)
     {
         try {
@@ -28,13 +34,18 @@ class UserController extends Controller
         }
     }
 
+    /*
+     * вставка пользователя
+     */
     public function store(Request $request)
     {
         try {
+            //проверка валидации
             $validator = Validator::make($request->all(), User::$rules);
             if ($validator->fails()) {
                 return parent::returnResponseData(1, '', 500, 'validation error', $validator->errors());
             } else {
+                //вставка пользователя
                 $input = $request->all();
                 $input['api_token']=str_random(60);
                 $user = User::create($input);
@@ -45,14 +56,19 @@ class UserController extends Controller
         }
     }
 
+    /*
+     * обновление пользователя по id
+     */
     public function update(Request $request, $id)
     {
         try {
             $user = User::findOrFail($id);
+            //проверка валидации
             $validator = Validator::make($request->all(), User::$rules);
             if ($validator->fails()) {
                 return parent::returnResponseData(1, '', 500, 'validation error', $validator->errors());
             } else {
+                //обновление пользователя
                 $user->update($request->all());
                 return parent::returnResponseData(0, $user, 200, 'user updated successfully');
             }
